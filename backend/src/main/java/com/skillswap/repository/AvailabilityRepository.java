@@ -1,5 +1,6 @@
 package com.skillswap.repository;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import com.skillswap.domain.entity.Availability;
@@ -23,4 +24,13 @@ public interface AvailabilityRepository extends BaseRepository<Availability, Lon
      * @param userId user identifier
      */
     void deleteByUserId(Long userId);
+
+    /**
+     * Lists active availability slots for a mentor on a specific day.
+     *
+     * @param userId mentor/user identifier
+     * @param dayOfWeek day of week name
+     * @return matching availability records
+     */
+    List<Availability> findByUserIdAndDayOfWeekAndActiveTrueOrderByStartTimeAsc(Long userId, DayOfWeek dayOfWeek);
 }

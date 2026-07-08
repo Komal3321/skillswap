@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.skillswap.domain.common.BaseEntity;
+import com.skillswap.domain.enums.SessionStatus;
+import com.skillswap.domain.enums.SessionType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +40,25 @@ public class Session extends BaseEntity {
     private SkillRequest skillRequest;
 
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "mentor_id", nullable = false)
+    private User mentor;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "learner_id", nullable = false)
+    private User learner;
+
+    @NotNull
+    @Size(max = 150)
+    @Column(nullable = false, length = 150)
+    private String title;
+
+    @Size(max = 1000)
+    @Column(length = 1000)
+    private String description;
+
+    @NotNull
     @Column(nullable = false)
     private Instant startTime;
 
@@ -46,13 +67,26 @@ public class Session extends BaseEntity {
     private Instant endTime;
 
     @NotNull
+    @Column(nullable = false)
+    private Integer durationMinutes;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private SessionStatus status;
+    private SessionType meetingType;
+
+    @Size(max = 500)
+    @Column(length = 500)
+    private String meetingLink;
 
     @Size(max = 255)
     @Column(length = 255)
-    private String meetingUrl;
+    private String location;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private SessionStatus status;
 
     @Size(max = 1000)
     @Column(length = 1000)
@@ -65,12 +99,4 @@ public class Session extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
     private Set<Certificate> certificates = new HashSet<>();
-
-    public enum SessionStatus {
-        SCHEDULED,
-        IN_PROGRESS,
-        COMPLETED,
-        CANCELLED,
-        NO_SHOW
-    }
 }
