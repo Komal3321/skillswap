@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.skillswap.domain.common.BaseEntity;
+import com.skillswap.domain.enums.ExchangeType;
+import com.skillswap.domain.enums.RequestStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,18 +49,41 @@ public class SkillRequest extends BaseEntity {
     @JoinColumn(name = "skill_id", nullable = false)
     private Skill skill;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "offered_skill_id")
+    private Skill offeredSkill;
+
     @Size(max = 1000)
     @Column(length = 1000)
     private String message;
+
+    @Size(max = 1000)
+    @Column(length = 1000)
+    private String mentorScheduleSuggestion;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private RequestStatus status;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private ExchangeType exchangeType;
+
     private Instant requestedStartTime;
 
     private Instant requestedEndTime;
+
+    private Instant acceptedAt;
+
+    private Instant rejectedAt;
+
+    private Instant cancelledAt;
+
+    private Instant completedAt;
+
+    private Instant expiresAt;
 
     @Builder.Default
     @OneToMany(mappedBy = "skillRequest", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -68,11 +93,4 @@ public class SkillRequest extends BaseEntity {
     @OneToMany(mappedBy = "skillRequest", cascade = CascadeType.ALL)
     private Set<Message> messages = new HashSet<>();
 
-    public enum RequestStatus {
-        PENDING,
-        ACCEPTED,
-        REJECTED,
-        CANCELLED,
-        COMPLETED
-    }
 }
