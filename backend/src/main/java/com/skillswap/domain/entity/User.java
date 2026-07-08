@@ -119,6 +119,9 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Wallet wallet;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserProfile profile;
+
     @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private Set<CommunityPost> posts = new HashSet<>();

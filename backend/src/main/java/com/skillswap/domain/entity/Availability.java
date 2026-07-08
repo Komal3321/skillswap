@@ -46,7 +46,18 @@ public class Availability extends BaseEntity {
     @Column(nullable = false)
     private LocalTime endTime;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private AvailabilityMode mode;
+
     @Builder.Default
     @Column(nullable = false)
     private boolean active = true;
+
+    public enum AvailabilityMode {
+        ONLINE,
+        OFFLINE,
+        BOTH
+    }
 }

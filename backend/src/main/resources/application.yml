@@ -37,6 +37,9 @@ app:
     allowed-methods: ${APP_CORS_ALLOWED_METHODS:GET,POST,PUT,PATCH,DELETE,OPTIONS}
     allowed-headers: ${APP_CORS_ALLOWED_HEADERS:Authorization,Content-Type,Accept,Origin}
     allow-credentials: ${APP_CORS_ALLOW_CREDENTIALS:true}
+  file-storage:
+    upload-dir: ${APP_FILE_STORAGE_UPLOAD_DIR:uploads}
+    public-path: ${APP_FILE_STORAGE_PUBLIC_PATH:/uploads}
 
 management:
   endpoints:
