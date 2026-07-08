@@ -1,0 +1,68 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: skillswap-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-skillswap}
+      MYSQL_USER: ${MYSQL_USER:-skillswap}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-skillswap}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-skillswap_root}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: skillswap-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./apps/api
+    container_name: skillswap-api
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-skillswap}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-skillswap}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-skillswap}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-replace-with-a-strong-secret}
+      JWT_ISSUER: ${JWT_ISSUER:-skillswap}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./apps/web
+    container_name: skillswap-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-5173}:80"
+    depends_on:
+      - api
+
+volumes:
+  mysql_data:
+  redis_data:
