@@ -1,63 +1,53 @@
 # SkillSwap
 
-SkillSwap is a peer-to-peer skill exchange and learning marketplace. This repository currently contains the project skeleton and configuration for the frontend, backend, infrastructure, shared packages, and cross-application tests.
+SkillSwap is a peer-to-peer skill exchange and learning marketplace. This repository currently contains a standard React frontend and Spring Boot backend skeleton.
 
 ## Project Structure
 
 ```text
 skillswap/
+  frontend/
+    public/
+    src/
+      assets/
+      components/
+      pages/
+      layouts/
+      routes/
+      services/
+      hooks/
+      context/
+      store/
+      utils/
+      styles/
+      App.jsx
+      main.jsx
+    package.json
+    vite.config.js
+    tailwind.config.js
+    postcss.config.js
+    Dockerfile
+  backend/
+    src/
+      main/
+        java/com/skillswap/
+        resources/application.yml
+      test/
+    pom.xml
+    Dockerfile
+    mvnw
   docs/
-  apps/
-    web/
-      public/
-      src/
-        app/
-        features/
-        components/
-        hooks/
-        services/
-        styles/
-        tests/
-      Dockerfile
-      package.json
-    api/
-      src/
-        main/
-          java/com/skillswap/api/
-            common/
-            modules/
-          resources/application.yml
-        test/java/com/skillswap/api/
-      Dockerfile
-      pom.xml
-    worker/
-    admin/
-  packages/
-    shared/
-    config/
-    ui/
-    validation/
-    testing/
-  infrastructure/
-    environments/
-    scripts/
-    database/
-    observability/
-  tests/
-    e2e/
-    load/
-    security/
-  tools/
-  .github/workflows/
   docker-compose.yml
   .env.example
+  .gitignore
+  README.md
 ```
 
 ## Technology Stack
 
 - Frontend: React 19, JavaScript, Vite, Tailwind CSS, Redux Toolkit, React Router, React Query, Axios, Framer Motion.
 - Backend: Java 21, Spring Boot 3, Maven, Spring Security, JWT placeholders, Spring Data JPA, Hibernate, MySQL 8, Redis.
-- Infrastructure: Docker, Docker Compose, GitHub Actions folder structure.
+- Infrastructure: Docker and Docker Compose.
 
 ## Local Setup
 
@@ -85,23 +75,23 @@ http://localhost:5173
 http://localhost:8080
 ```
 
-The `web` and `api` Dockerfiles are included for the application containers. They will become buildable after the frontend entrypoint and Spring Boot application class are added in the implementation phase.
+The `frontend` and `backend` Dockerfiles are included for the application containers.
 
 ## Frontend Setup
 
 ```bash
-cd apps/web
+cd frontend
 npm install
 npm run dev
 ```
 
-The frontend skeleton is configured through `package.json` dependencies and scripts. Application entry files, routes, pages, stores, and UI implementation are intentionally not generated yet.
+The frontend skeleton is configured with Vite, Tailwind CSS, React, Redux Toolkit, React Router, React Query, Axios, and Framer Motion. Pages, routes, stores, and UI features are intentionally not generated yet.
 
 ## Backend Setup
 
 ```bash
-cd apps/api
-mvn spring-boot:run
+cd backend
+./mvnw spring-boot:run
 ```
 
 The backend skeleton includes Maven dependencies and `application.yml` configuration for MySQL, Redis, and JWT placeholders. Controllers, services, repositories, entities, and API implementations are intentionally not generated yet.

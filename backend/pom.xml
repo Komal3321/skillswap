@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>com.skillswap</groupId>
-    <artifactId>api</artifactId>
+    <artifactId>skillswap-backend</artifactId>
     <version>0.1.0-SNAPSHOT</version>
-    <name>skillswap-api</name>
-    <description>SkillSwap backend API skeleton</description>
+    <name>skillswap-backend</name>
+    <description>SkillSwap backend skeleton</description>
 
     <properties>
         <java.version>21</java.version>

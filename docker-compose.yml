@@ -34,7 +34,7 @@ services:
 
   api:
     build:
-      context: ./apps/api
+      context: ./backend
     container_name: skillswap-api
     restart: unless-stopped
     environment:
@@ -55,7 +55,7 @@ services:
 
   web:
     build:
-      context: ./apps/web
+      context: ./frontend
     container_name: skillswap-web
     restart: unless-stopped
     ports:
