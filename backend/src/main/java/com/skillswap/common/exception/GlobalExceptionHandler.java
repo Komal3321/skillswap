@@ -9,10 +9,12 @@ import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -46,6 +48,18 @@ public class GlobalExceptionHandler {
                 .map(violation -> new FieldViolation(violation.getPropertyPath().toString(), violation.getMessage()))
                 .toList();
         return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", "VALIDATION_FAILED", violations);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMissingRequestParameter(
+            MissingServletRequestParameterException exception) {
+        FieldViolation violation = new FieldViolation(exception.getParameterName(), "Request parameter is required");
+        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", "VALIDATION_FAILED", List.of(violation));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDataIntegrity(DataIntegrityViolationException exception) {
+        return buildResponse(HttpStatus.CONFLICT, "Request conflicts with existing data", "DATA_INTEGRITY_VIOLATION", List.of());
     }
 
     @ExceptionHandler({AuthenticationException.class, JwtException.class})

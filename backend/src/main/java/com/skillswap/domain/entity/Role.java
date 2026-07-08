@@ -37,8 +37,8 @@ public class Role extends BaseEntity {
     private Set<User> users = new HashSet<>();
 
     public enum RoleName {
-        USER,
         ADMIN,
-        MODERATOR
+        MENTOR,
+        LEARNER
     }
 }

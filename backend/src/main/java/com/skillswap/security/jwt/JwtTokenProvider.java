@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
@@ -45,10 +47,19 @@ public class JwtTokenProvider {
         return claims.getExpiration().after(new Date());
     }
 
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
+        return resolver.apply(extractClaims(token));
+    }
+
     private String buildToken(String subject, Map<String, Object> claims, Instant issuedAt, Instant expiresAt) {
         return Jwts.builder()
                 .claims(claims)
                 .subject(subject)
+                .id(UUID.randomUUID().toString())
                 .issuer(properties.issuer())
                 .issuedAt(Date.from(issuedAt))
                 .expiration(Date.from(expiresAt))
