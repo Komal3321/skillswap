@@ -43,7 +43,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-skillswap}
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
-      JWT_SECRET: ${JWT_SECRET:-replace-with-a-strong-secret}
+      JWT_SECRET: ${JWT_SECRET:-replace-with-a-strong-secret-of-at-least-32-characters}
       JWT_ISSUER: ${JWT_ISSUER:-skillswap}
     ports:
       - "${API_PORT:-8080}:8080"
