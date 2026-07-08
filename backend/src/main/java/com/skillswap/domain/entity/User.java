@@ -97,7 +97,7 @@ public class User extends BaseEntity {
     private Set<Message> sentMessages = new HashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private Set<Message> receivedMessages = new HashSet<>();
 
     @Builder.Default

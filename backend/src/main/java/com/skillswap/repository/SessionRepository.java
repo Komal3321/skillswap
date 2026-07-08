@@ -154,4 +154,24 @@ public interface SessionRepository extends BaseRepository<Session, Long> {
             @Param("endTime") Instant endTime,
             @Param("statuses") Collection<SessionStatus> statuses,
             @Param("excludedSessionId") Long excludedSessionId);
+
+    /**
+     * Checks whether two users share an active session.
+     *
+     * @param firstUserId first user id
+     * @param secondUserId second user id
+     * @param statuses active session statuses
+     * @return true when an active session exists
+     */
+    @Query("""
+            select count(session) > 0
+            from Session session
+            where session.status in :statuses
+              and ((session.mentor.id = :firstUserId and session.learner.id = :secondUserId)
+                or (session.mentor.id = :secondUserId and session.learner.id = :firstUserId))
+            """)
+    boolean existsActiveBetweenUsers(
+            @Param("firstUserId") Long firstUserId,
+            @Param("secondUserId") Long secondUserId,
+            @Param("statuses") Collection<SessionStatus> statuses);
 }

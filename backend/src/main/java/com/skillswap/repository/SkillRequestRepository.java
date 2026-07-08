@@ -144,4 +144,24 @@ public interface SkillRequestRepository extends BaseRepository<SkillRequest, Lon
             @Param("pendingStatus") RequestStatus pendingStatus,
             @Param("expiredStatus") RequestStatus expiredStatus,
             @Param("now") Instant now);
+
+    /**
+     * Checks whether two users have an accepted skill exchange request.
+     *
+     * @param firstUserId first user id
+     * @param secondUserId second user id
+     * @param status accepted status
+     * @return true when an accepted request exists
+     */
+    @Query("""
+            select count(request) > 0
+            from SkillRequest request
+            where request.status = :status
+              and ((request.requester.id = :firstUserId and request.provider.id = :secondUserId)
+                or (request.requester.id = :secondUserId and request.provider.id = :firstUserId))
+            """)
+    boolean existsAcceptedBetweenUsers(
+            @Param("firstUserId") Long firstUserId,
+            @Param("secondUserId") Long secondUserId,
+            @Param("status") RequestStatus status);
 }
